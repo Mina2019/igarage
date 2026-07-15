@@ -418,6 +418,7 @@ if menu == "Sell Item":
                 purchase_mode,
             "seller_email":
                 seller_email,
+            "listing_token": listing_token,
             "image_urls":
                 image_urls
         }).execute()
