@@ -389,6 +389,9 @@ if menu == "Seller Confirmation":
             st.write(f"Seller: {listing['seller_email']}")
             if st.button("✅ item delivered to buyer"):
                 st.success("Delivery confirmed. Waiting for buyer confirmation.")
+                st.info(
+        "➡️ The buyer should now visit the Buyer Confirmation page to complete the transaction."
+    )
 # ==========================================================
 # BUYER CONFIRMATION
 # ==========================================================
