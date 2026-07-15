@@ -394,41 +394,41 @@ if menu == "Seller Confirmation":
 # ==========================================================
 if menu == "Buyer Confirmation":
     st.header("Buyer Confirmation")
-    listing_token = st.text_input(
+    listing_id = st.text_input(
         "Enter Listing ID"
     )
     if st.button("Find Listing"):
-        listing = supabase.table(
-            "garage_listings"
-        ).select("*").eq(
-            "listing_token",
-            listing_token
-        ).execute().data
-        if len(listing) == 0:
-            st.error(
-                "Listing not found."
-            )
+        if not listing_id:
+            st.warning("Please enter a Listing ID.")
         else:
-            listing = listing[0]
-            st.success(
-                "Listing found!"
-            )
-            st.write(
-                f"Item: {listing['title']}"
-            )
-            st.write(
-                f"Price: ${listing['price']}"
-            )
-            st.write(
-                f"Seller: {listing['seller_email']}"
-            )
-            st.divider()
-            st.write(
-                "Seller has delivered the item?"
-            )
-            if st.button(
-                "✅ I Received the Item"
-            ):
-                st.success(
-                    "Buyer confirmation completed!"
+            listing = supabase.table(
+                "garage_listings"
+            ).select("*").eq(
+                "listing_token",
+                listing_id.strip()
+            ).execute().data
+            if not listing:
+                st.error(
+                    "Listing not found."
                 )
+            else:
+                item = listing[0]
+                st.success(
+                    "Listing found!"
+                )
+                st.write(
+                    f"🏠 Item: {item['title']}"
+                )
+                st.write(
+                    f"💰 Price: ${item['price']}"
+                )
+                st.write(
+                    f"Seller: {item['seller_email']}"
+                )
+                st.divider()
+                if st.button(
+                    "✅ I Received the Item"
+                ):
+                    st.success(
+                        "Buyer confirmation completed!"
+                    )
