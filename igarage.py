@@ -381,175 +381,141 @@ if menu == "Sell Item":
                             photo.type
                         }
                     )
-
-
                     image_url = (
                         f"{SUPABASE_URL}"
                         "/storage/v1/object/public/"
                         f"garage_images/{file_name}"
                     )
-
-
                     image_urls.append(
                         image_url
                     )
-
-
                 except Exception as e:
-
                     st.error(
                         "Image upload failed"
                     )
-
                     st.exception(e)
-
                     st.stop()
-
-
-
         # ==========================
         # SAVE LISTING
         # ==========================
-
         result = supabase.table(
             "garage_listings"
         ).insert({
-
             "title":
                 title,
-
             "description":
                 description,
-
             "price":
                 price,
-
             "city":
                 "Vancouver",
-
             "exchange_type":
                 exchange_type,
-
             "purchase_mode":
                 purchase_mode,
-
             "seller_email":
                 seller_email,
-
             "image_urls":
                 image_urls
-
         }).execute()
-
-
-
         st.success(
             "✅ Item posted successfully!"
         )
-
-
         st.write(
             "Seller email saved:",
             seller_email
         )
-        
 # ==========================================================
 # MY ADS
 # ==========================================================
 
 if menu == "My Ads":
-
     st.header("My Ads")
-
-
     seller_email = st.text_input(
         "Enter your seller email"
     )
-
-
     if st.button("Show My Ads"):
-
         ads = supabase.table(
             "garage_listings"
         ).select("*").eq(
             "seller_email",
             seller_email
         ).execute().data
-
-
         if not ads:
-
             st.warning(
                 "No ads found."
             )
-
-
         for ad in ads:
-
             st.divider()
-
             st.subheader(
                 ad["title"]
             )
-
             st.write(
                 f"💰 Price: ${ad['price']}"
             )
-
-
             if ad["image_urls"]:
-
                 st.image(
                     ad["image_urls"][0],
                     width=150
                 )
-
-
             if st.button(
                 "🗑 Delete Ad",
                 key=f"delete_{ad['id']}"
             ):
-
                 supabase.table(
                     "garage_listings"
                 ).delete().eq(
                     "id",
                     ad["id"]
                 ).execute()
-
-
                 st.success(
                     "Ad deleted successfully!"
                 )
-
                 st.rerun()
-                
+
 # ==========================================================
-# CONFIRM TRANSACTION
+# MY ORDER CONFIRMATION
 # ==========================================================
+
 if menu == "My Order Confirmation":
-    st.header(
-        "Confirm Trade"
-    )
-    token = st.text_input(
-        "Enter order token"
-    )
-    if st.button(
-        "Confirm Trade Completed"
-    ):
-        supabase.table(
+
+    st.header("Confirm Transaction")
+
+    token = st.text_input("Transaction ID")
+
+    if st.button("Find Transaction"):
+
+        order = supabase.table(
             "garage_orders"
-        ).update({
-            "order_status":
-                "completed",
-            "completed_at":
-                datetime.now().isoformat()
-        }).eq(
+        ).select("*").eq(
             "order_token",
             token
-        ).execute()
+        ).execute().data
 
+        if len(order) == 0:
 
-        st.success(
-            "✅ Trade confirmed!"
-        )
+            st.error("Transaction not found.")
+
+        else:
+
+            order = order[0]
+
+            st.success("Transaction found!")
+
+            st.write(f"Listing ID: {order['listing_id']}")
+            st.write(f"Seller: {order['seller_email']}")
+            st.write(f"Amount: ${order['total_paid']}")
+
+            if st.button("✅ Confirm Trade Completed"):
+
+                supabase.table(
+                    "garage_orders"
+                ).update({
+                    "order_status": "completed",
+                    "completed_at": datetime.now().isoformat()
+                }).eq(
+                    "order_token",
+                    token
+                ).execute()
+
+                st.success("🎉 Transaction completed!")
