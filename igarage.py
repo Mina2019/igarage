@@ -175,11 +175,9 @@ if menu == "Browse Items":
                 key=item["id"]
             ):
 
-
                 order_token = str(
                     uuid.uuid4()
                 )
-
 
                 supabase.table(
                     "garage_orders"
@@ -211,28 +209,32 @@ if menu == "Browse Items":
 
                 }).execute()
 
-            supabase.table(
-                "garage_listings"
-            ).delete().eq(
-                "id",
-                item["id"]
-            ).execute()
-                        
 
-                st.success("✅ Order Created!")
+                st.success(
+                    "✅ Order Created!"
+                )
+
+
                 st.write(
                     f"**Seller Email:** {item['seller_email']}"
                 )
+
+
                 if item["exchange_type"] == "meet":
+
                     st.info(
                         "📍 Meet at Metropolis at Metrotown.\n\n"
                         "Please email the seller to arrange a convenient meeting time."
                     )
+
                 else:
+
                     st.info(
                         "🏠 Pickup from seller.\n\n"
                         "Please email the seller to arrange a pickup time."
                     )
+
+        
 # ==========================================================
 # SELL ITEM
 # ==========================================================
