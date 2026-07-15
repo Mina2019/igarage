@@ -169,7 +169,7 @@ if menu == "Browse Items":
                 item["purchase_mode"]
             )
 
-
+           
             if st.button(
                 "Buy Now",
                 key=item["id"]
@@ -211,6 +211,13 @@ if menu == "Browse Items":
 
                 }).execute()
 
+            supabase.table(
+                "garage_listings"
+            ).delete().eq(
+                "id",
+                item["id"]
+            ).execute()
+                        
 
                 st.success("✅ Order Created!")
                 st.write(
