@@ -47,7 +47,7 @@ menu = st.sidebar.selectbox(
         "Browse Items",
         "Sell Item",
         "My Ads",
-        "My Order Confirmation"
+        "Seller Confirmation"
     ]
 )
 
@@ -482,7 +482,7 @@ if menu == "My Ads":
                 st.rerun()
 
 # ==========================================================
-# MY ORDER CONFIRMATION
+# SELLER CONFIRMATION
 # ==========================================================
 
 if menu == "Seller Confirmation":
