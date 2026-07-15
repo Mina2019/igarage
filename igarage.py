@@ -47,7 +47,8 @@ menu = st.sidebar.selectbox(
         "Browse Items",
         "Sell Item",
         "My Ads",
-        "Seller Confirmation"
+        "Seller Confirmation",
+        "Buyer Confirmation"
     ]
 )
 
@@ -493,37 +494,92 @@ if menu == "Seller Confirmation":
 
     if st.button("Find Transaction"):
 
-        order = supabase.table(
-            "garage_orders"
-        ).select("*").eq(
-            "order_token",
-            token
-        ).execute().data
+        listing = supabase.table(
+                "garage_listings"
+            ).select("*").eq(
+                "listing_token",
+                token
+            ).execute().data
 
-        if len(order) == 0:
+        if len(listing) == 0:
 
-            st.error("Transaction not found.")
+            st.error("Listing not found.")
 
         else:
 
-            order = order[0]
+            listing = listing[0]
 
-            st.success("Transaction found!")
+            st.success("Listing found!")
 
-            st.write(f"Listing ID: {order['listing_id']}")
-            st.write(f"Seller: {order['seller_email']}")
-            st.write(f"Amount: ${order['total_paid']}")
+            st.write(f"Item: {listing['title']}")
+            st.write(f"Price: ${listing['price']}")
+            st.write(f"Seller: {listing['seller_email']}")
 
-            if st.button("✅ Confirm Trade Completed"):
+            if st.button("✅ item delivered to buyer"):
 
-                supabase.table(
-                    "garage_orders"
-                ).update({
-                    "order_status": "completed",
-                    "completed_at": datetime.now().isoformat()
-                }).eq(
-                    "order_token",
-                    token
-                ).execute()
+                st.success("Delivery confirmed. Waiting for buyer confirmation.")
 
-                st.success("🎉 Transaction completed!")
+# ==========================================================
+# BUYER CONFIRMATION
+# ==========================================================
+
+if menu == "Buyer Confirmation":
+
+    st.header("Buyer Confirmation")
+
+    listing_token = st.text_input(
+        "Enter Listing ID"
+    )
+
+    if st.button("Find Listing"):
+
+        listing = supabase.table(
+            "garage_listings"
+        ).select("*").eq(
+            "listing_token",
+            listing_token
+        ).execute().data
+
+
+        if len(listing) == 0:
+
+            st.error(
+                "Listing not found."
+            )
+
+        else:
+
+            listing = listing[0]
+
+            st.success(
+                "Listing found!"
+            )
+
+            st.write(
+                f"Item: {listing['title']}"
+            )
+
+            st.write(
+                f"Price: ${listing['price']}"
+            )
+
+            st.write(
+                f"Seller: {listing['seller_email']}"
+            )
+
+
+            st.divider()
+
+
+            st.write(
+                "Seller has delivered the item?"
+            )
+
+
+            if st.button(
+                "✅ I Received the Item"
+            ):
+
+                st.success(
+                    "Buyer confirmation completed!"
+                )
