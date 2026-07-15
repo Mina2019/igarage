@@ -332,36 +332,40 @@ if menu == "My Ads":
             st.warning(
                 "No ads found."
             )
-        for ad in ads:
-            st.divider()
-            st.subheader(
-                ad["title"]
+        else:
+            st.success(
+                f"{len(ads)} ad(s) found"
             )
-            st.write(
-                f"💰 Price: ${ad['price']}"
-            )
-            if ad["image_urls"]:
-                st.image(
-                    ad["image_urls"][0],
-                    width=150
+            for ad in ads:
+                st.divider()
+                st.subheader(
+                    ad["title"]
                 )
-            st.write(
-                    f"🆔 Listing ID: {ad['listing_token']}"
+                st.write(
+                    f"💰 Price: ${ad['price']}"
                 )
-            if st.button(
-                "🗑 Delete Ad",
-                key=f"delete_{ad['id']}"
-            ):
-                supabase.table(
-                    "garage_listings"
-                ).delete().eq(
-                    "id",
-                    ad["id"]
-                ).execute()
-                st.success(
-                    "Ad deleted successfully!"
+                st.write(
+                    f"🆔 Listing ID: {ad.get('listing_token','Not assigned')}"
                 )
-                st.rerun()
+                if ad.get("image_urls"):
+                    st.image(
+                        ad["image_urls"][0],
+                        width=150
+                    )
+                if st.button(
+                    "🗑 Delete Ad",
+                    key=f"delete_{ad['id']}"
+                ):
+                    supabase.table(
+                        "garage_listings"
+                    ).delete().eq(
+                        "id",
+                        ad["id"]
+                    ).execute()
+                    st.success(
+                        "✅ Ad deleted successfully!"
+                    )
+                    st.rerun()
 # ==========================================================
 # SELLER CONFIRMATION
 # ==========================================================
