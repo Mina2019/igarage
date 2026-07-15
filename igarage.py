@@ -46,6 +46,7 @@ menu = st.sidebar.selectbox(
     [
         "Browse Items",
         "Sell Item",
+        "My Ads",
         "My Order Confirmation"
     ]
 )
@@ -452,6 +453,77 @@ if menu == "Sell Item":
             seller_email
         )
         
+# ==========================================================
+# MY ADS
+# ==========================================================
+
+if menu == "My Ads":
+
+    st.header("My Ads")
+
+
+    seller_email = st.text_input(
+        "Enter your seller email"
+    )
+
+
+    if st.button("Show My Ads"):
+
+        ads = supabase.table(
+            "garage_listings"
+        ).select("*").eq(
+            "seller_email",
+            seller_email
+        ).execute().data
+
+
+        if not ads:
+
+            st.warning(
+                "No ads found."
+            )
+
+
+        for ad in ads:
+
+            st.divider()
+
+            st.subheader(
+                ad["title"]
+            )
+
+            st.write(
+                f"💰 Price: ${ad['price']}"
+            )
+
+
+            if ad["image_urls"]:
+
+                st.image(
+                    ad["image_urls"][0],
+                    width=150
+                )
+
+
+            if st.button(
+                "🗑 Delete Ad",
+                key=f"delete_{ad['id']}"
+            ):
+
+                supabase.table(
+                    "garage_listings"
+                ).delete().eq(
+                    "id",
+                    ad["id"]
+                ).execute()
+
+
+                st.success(
+                    "Ad deleted successfully!"
+                )
+
+                st.rerun()
+                
 # ==========================================================
 # CONFIRM TRANSACTION
 # ==========================================================
