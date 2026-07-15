@@ -426,20 +426,7 @@ if menu == "Sell Item":
             seller_email
         )
 
-        listing_token = str(uuid.uuid4())
 
-        result = supabase.table(
-            "garage_listings"
-        ).insert({
-
-            "title": title,
-            "description": description,
-            "price": price,
-            "seller_email": seller_email,
-            "listing_token": listing_token,
-            "image_urls": image_urls
-
-        }).execute()
 # ==========================================================
 # MY ADS
 # ==========================================================
@@ -473,6 +460,21 @@ if menu == "My Ads":
                     ad["image_urls"][0],
                     width=150
                 )
+
+        listing_token = str(uuid.uuid4())
+
+        result = supabase.table(
+            "garage_listings"
+        ).insert({
+
+            "title": title,
+            "description": description,
+            "price": price,
+            "seller_email": seller_email,
+            "listing_token": listing_token,
+            "image_urls": image_urls
+
+        }).execute()
 #-----------------------------------------
             order = supabase.table(
                 "garage_orders"
