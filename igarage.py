@@ -321,39 +321,41 @@ if menu == "Sell Item":
         image_urls = []
 
 
+        # Upload images
         for photo in photos[:5]:
 
+            file_name = f"{uuid.uuid4()}_{photo.name}"
 
-            file_name = (
-                str(uuid.uuid4())
-                + "_"
-                + photo.name
-            )
+            try:
+
+                result = supabase.storage.from_("garage_images").upload(
+                    file_name,
+                    photo.getvalue(),
+                    {
+                        "content-type": photo.type,
+                        "upsert": "true"
+                    }
+                )
+
+                image_url = (
+                    f"{SUPABASE_URL}/storage/v1/object/public/"
+                    f"garage_images/{file_name}"
+                )
+
+                image_urls.append(image_url)
+
+                st.success(f"Uploaded {photo.name}")
+
+            except Exception as e:
+
+                st.error("Image upload failed")
+                st.exception(e)
+                st.stop()
 
 
-            supabase.storage.from_(
-                "garage_images"
-            ).upload(
-                file_name,
-                photo.getvalue(),
-                {
-                    "content-type":
-                    photo.type
-                }
-            )
 
 
-            image_url = (
-                SUPABASE_URL
-                + "/storage/v1/object/public/"
-                + "garage_images/"
-                + file_name
-            )
 
-
-            image_urls.append(
-                image_url
-            )
 
 
 
