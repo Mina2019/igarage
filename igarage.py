@@ -417,7 +417,6 @@ if menu == "Sell Item":
                 purchase_mode,
             "seller_email":
                 seller_email,
-            "listing_token": listing_token,
             "image_urls":
                 image_urls
         }).execute()
@@ -462,6 +461,9 @@ if menu == "My Ads":
                 st.image(
                     ad["image_urls"][0],
                     width=150
+                )
+            st.write(
+                    f"🆔 Listing ID: {ad['listing_token']}"
                 )
          
             if st.button(
