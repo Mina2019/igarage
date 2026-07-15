@@ -35,7 +35,7 @@ menu = st.sidebar.selectbox(
     [
         "Browse Items",
         "Sell an Item",
-        "My Order Confirmation"
+        "Confirm Transaction"
     ]
 )
 # ==========================================================
