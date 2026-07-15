@@ -272,8 +272,11 @@ if menu == "Sell an Item":
             supabase.storage.from_(
                 "garage_images"
             ).upload(
-                file_name,
-                img.getvalue()
+                filename,
+                photo.getvalue(),
+                {
+                    "content-type": photo.type
+                }
             )
 
 
