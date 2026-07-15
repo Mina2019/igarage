@@ -51,24 +51,16 @@ menu = st.sidebar.selectbox(
         "Buyer Confirmation"
     ]
 )
-
-
 st.sidebar.divider()
-
 st.sidebar.info(
     "💳 iGarage Platform Fee\n\n"
     "$1 per completed transaction"
 )
-
 # ==========================================================
 # BROWSE ITEMS
 # ==========================================================
-
 if menu == "Browse Items":
-
     st.header("Available Items")
-
-
     filter_mode = st.selectbox(
         "Filter",
         [
@@ -77,19 +69,13 @@ if menu == "Browse Items":
             "Reserve"
         ]
     )
-
-
     listings = supabase.table(
         "garage_listings"
     ).select("*").eq(
         "status",
         "active"
     ).execute().data
-
-
     for item in listings:
-
-
         if filter_mode == "Buy Now":
 
             if item["purchase_mode"] not in [
@@ -97,8 +83,6 @@ if menu == "Browse Items":
                 "both"
             ]:
                 continue
-
-
         if filter_mode == "Reserve":
 
             if item["purchase_mode"] not in [
@@ -106,168 +90,109 @@ if menu == "Browse Items":
                 "both"
             ]:
                 continue
-
-
         st.divider()
-
-
         col1, col2 = st.columns(
             [1, 2]
         )
-
-
         with col1:
-
             if item["image_urls"]:
-
                 st.image(
                     item["image_urls"][0],
                     width=200
                 )
-
-
         with col2:
-
             st.subheader(
                 item["title"]
             )
-
-
             st.write(
                 item["description"]
             )
-
-
             st.write(
                 f"💰 Item price: ${item['price']}"
             )
-
-
             st.write(
                 "💳 iGarage fee: $1"
             )
-
-
             st.write(
                 f"Total: ${item['price'] + 1}"
             )
-
-
             if item["exchange_type"] == "meet":
-
                 st.success(
                     "📍 Meet at Metropolis at Metrotown"
                 )
-
             else:
-
                 st.warning(
                     "🏠 Pickup from seller"
                 )
-
-
             st.write(
                 "Payment option:",
                 item["purchase_mode"]
             )
-
-           
+            st.write(
+                f"🏷️ Listing ID: {item['listing_token']}"
+            )
             if st.button(
                 "Buy Now",
                 key=item["id"]
             ):
-
                 order_token = str(
                     uuid.uuid4()
                 )
-
                 supabase.table(
                     "garage_orders"
                 ).insert({
-
                     "listing_id":
                         item["id"],
-
                     "buyer_email":
                         "buyer@example.com",
-
                     "seller_email":
                         item["seller_email"],
-
                     "item_price":
                         item["price"],
-
                     "platform_fee":
                         1,
-
                     "total_paid":
                         item["price"] + 1,
-
                     "order_status":
                         "paid",
-
                     "listing_token": listing_token,
-
                 }).execute()
-
-
                 st.success(
                     "✅ Order Created!"
                 )
-
-
                 st.write(
                     f"**Seller Email:** {item['seller_email']}"
                 )
-
-
                 if item["exchange_type"] == "meet":
-
                     st.info(
                         "📍 Meet at Metropolis at Metrotown.\n\n"
                         "Please email the seller to arrange a convenient meeting time."
                     )
-
                 else:
-
                     st.info(
                         "🏠 Pickup from seller.\n\n"
                         "Please email the seller to arrange a pickup time."
                     )
-
-        
 # ==========================================================
 # SELL ITEM
 # ==========================================================
-
 if menu == "Sell Item":
-
     st.header(
         "Post Your Item"
     )
-
-
     title = st.text_input(
         "Item title"
     )
-
-
     description = st.text_area(
         "Description"
     )
-
-
     price = st.number_input(
         "Price ($)",
         min_value=1
     )
-
-
     seller_email = st.text_input(
         "Your email"
     )
-
-
     exchange = st.selectbox(
         "Exchange Method",
         [
@@ -275,18 +200,10 @@ if menu == "Sell Item":
             "Pickup from seller"
         ]
     )
-
-
     if exchange == "Meet at Metropolis at Metrotown":
-
         exchange_type = "meet"
-
     else:
-
         exchange_type = "pickup"
-
-
-
     purchase = st.selectbox(
         "Selling Method",
         [
@@ -295,22 +212,12 @@ if menu == "Sell Item":
             "Both"
         ]
     )
-
-
     if purchase == "Buy Now only":
-
         purchase_mode = "buy_now"
-
     elif purchase == "Reserve only":
-
         purchase_mode = "reserve"
-
     else:
-
         purchase_mode = "both"
-
-
-
     photos = st.file_uploader(
         "Upload up to 5 pictures",
         accept_multiple_files=True,
@@ -320,57 +227,35 @@ if menu == "Sell Item":
             "jpeg"
         ]
     )
-
-
     if st.button(
         "Post Item"
     ):
-
-
         # ==========================
         # CHECK EMAIL
         # ==========================
-
         if not seller_email.strip():
-
             st.error(
                 "Please enter your email."
             )
-
             st.stop()
-
-
         if not re.match(
             r"^[^@]+@[^@]+\.[^@]+$",
             seller_email
         ):
-
             st.error(
                 "Please enter a valid email address."
             )
-
             st.stop()
-
-
-
         image_urls = []
-
-
         # ==========================
         # UPLOAD IMAGES
         # ==========================
-
         if photos:
-
             for photo in photos[:5]:
-
                 file_name = (
                     f"{uuid.uuid4()}_{photo.name}"
                 )
-
-
                 try:
-
                     supabase.storage.from_(
                         "garage_images"
                     ).upload(
@@ -428,12 +313,9 @@ if menu == "Sell Item":
             "Seller email saved:",
             seller_email
         )
-
-
 # ==========================================================
 # MY ADS
 # ==========================================================
-
 if menu == "My Ads":
     st.header("My Ads")
     seller_email = st.text_input(
@@ -466,7 +348,6 @@ if menu == "My Ads":
             st.write(
                     f"🆔 Listing ID: {ad['listing_token']}"
                 )
-         
             if st.button(
                 "🗑 Delete Ad",
                 key=f"delete_{ad['id']}"
@@ -481,105 +362,69 @@ if menu == "My Ads":
                     "Ad deleted successfully!"
                 )
                 st.rerun()
-
 # ==========================================================
 # SELLER CONFIRMATION
 # ==========================================================
-
 if menu == "Seller Confirmation":
-
     st.header("Confirm Transaction")
-
     token = st.text_input("Transaction ID")
-
     if st.button("Find Transaction"):
-
         listing = supabase.table(
                 "garage_listings"
             ).select("*").eq(
                 "listing_token",
                 token
             ).execute().data
-
         if len(listing) == 0:
-
             st.error("Listing not found.")
-
         else:
-
             listing = listing[0]
-
             st.success("Listing found!")
-
             st.write(f"Item: {listing['title']}")
             st.write(f"Price: ${listing['price']}")
             st.write(f"Seller: {listing['seller_email']}")
-
             if st.button("✅ item delivered to buyer"):
-
                 st.success("Delivery confirmed. Waiting for buyer confirmation.")
-
 # ==========================================================
 # BUYER CONFIRMATION
 # ==========================================================
-
 if menu == "Buyer Confirmation":
-
     st.header("Buyer Confirmation")
-
     listing_token = st.text_input(
         "Enter Listing ID"
     )
-
     if st.button("Find Listing"):
-
         listing = supabase.table(
             "garage_listings"
         ).select("*").eq(
             "listing_token",
             listing_token
         ).execute().data
-
-
         if len(listing) == 0:
-
             st.error(
                 "Listing not found."
             )
-
         else:
-
             listing = listing[0]
-
             st.success(
                 "Listing found!"
             )
-
             st.write(
                 f"Item: {listing['title']}"
             )
-
             st.write(
                 f"Price: ${listing['price']}"
             )
-
             st.write(
                 f"Seller: {listing['seller_email']}"
             )
-
-
             st.divider()
-
-
             st.write(
                 "Seller has delivered the item?"
             )
-
-
             if st.button(
                 "✅ I Received the Item"
             ):
-
                 st.success(
                     "Buyer confirmation completed!"
                 )
