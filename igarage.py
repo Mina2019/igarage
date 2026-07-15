@@ -52,6 +52,16 @@ menu = st.sidebar.selectbox(
     ]
 )
 
+# ==========================================================
+# SIDEBAR INFORMATION
+# ==========================================================
+
+st.sidebar.divider()
+
+st.sidebar.info(
+    "💳 iGarage Platform Fee\n\n"
+    "$1 per completed transaction"
+)
 
 # ==========================================================
 # BROWSE ITEMS
