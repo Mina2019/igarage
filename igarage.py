@@ -8,7 +8,7 @@ import streamlit as st
 from supabase import create_client
 from datetime import datetime
 import uuid
-
+import re
 
 # ==========================================================
 # SUPABASE CONNECTION
@@ -29,8 +29,6 @@ st.set_page_config(
     page_icon="🏠",
     layout="wide"
 )
-
-
 # ==========================================================
 # HEADER
 # ==========================================================
@@ -59,7 +57,6 @@ st.sidebar.info(
     "💳 iGarage Platform Fee\n\n"
     "$1 per completed transaction"
 )
-
 
 # ==========================================================
 # BROWSE ITEMS
@@ -288,12 +285,22 @@ if menu == "Sell Item":
             "Both"
         ]
     )
+
+
     if purchase == "Buy Now only":
+
         purchase_mode = "buy_now"
+
     elif purchase == "Reserve only":
+
         purchase_mode = "reserve"
+
     else:
+
         purchase_mode = "both"
+
+
+
     photos = st.file_uploader(
         "Upload up to 5 pictures",
         accept_multiple_files=True,
@@ -303,60 +310,139 @@ if menu == "Sell Item":
             "jpeg"
         ]
     )
+
+
     if st.button(
         "Post Item"
     ):
+
+
+        # ==========================
+        # CHECK EMAIL
+        # ==========================
+
+        if not seller_email.strip():
+
+            st.error(
+                "Please enter your email."
+            )
+
+            st.stop()
+
+
+        if not re.match(
+            r"^[^@]+@[^@]+\.[^@]+$",
+            seller_email
+        ):
+
+            st.error(
+                "Please enter a valid email address."
+            )
+
+            st.stop()
+
+
+
         image_urls = []
-        # Upload images
-        for photo in photos[:5]:
-            file_name = f"{uuid.uuid4()}_{photo.name}"
-            try:
-                result = supabase.storage.from_("garage_images").upload(
-                    file_name,
-                    photo.getvalue(),
-                    {
-                        "content-type": photo.type,
-                        "upsert": "true"
-                    }
+
+
+        # ==========================
+        # UPLOAD IMAGES
+        # ==========================
+
+        if photos:
+
+            for photo in photos[:5]:
+
+                file_name = (
+                    f"{uuid.uuid4()}_{photo.name}"
                 )
 
-                image_url = (
-                    f"{SUPABASE_URL}/storage/v1/object/public/"
-                    f"garage_images/{file_name}"
-                )
 
-                image_urls.append(image_url)
+                try:
 
-                st.success(f"Uploaded {photo.name}")
+                    supabase.storage.from_(
+                        "garage_images"
+                    ).upload(
+                        file_name,
+                        photo.getvalue(),
+                        {
+                            "content-type":
+                            photo.type
+                        }
+                    )
 
-            except Exception as e:
 
-                st.error("Image upload failed")
-                st.exception(e)
-                st.stop()
-        supabase.table(
+                    image_url = (
+                        f"{SUPABASE_URL}"
+                        "/storage/v1/object/public/"
+                        f"garage_images/{file_name}"
+                    )
+
+
+                    image_urls.append(
+                        image_url
+                    )
+
+
+                except Exception as e:
+
+                    st.error(
+                        "Image upload failed"
+                    )
+
+                    st.exception(e)
+
+                    st.stop()
+
+
+
+        # ==========================
+        # SAVE LISTING
+        # ==========================
+
+        result = supabase.table(
             "garage_listings"
         ).insert({
+
             "title":
                 title,
+
             "description":
                 description,
+
             "price":
                 price,
+
             "city":
                 "Vancouver",
+
             "exchange_type":
                 exchange_type,
+
             "purchase_mode":
                 purchase_mode,
+
             "seller_email":
                 seller_email,
+
             "image_urls":
                 image_urls
+
         }).execute()
+
+
+
         st.success(
             "✅ Item posted successfully!"
         )
+
+
+        st.write(
+            "Seller email saved:",
+            seller_email
+        )
+        
 # ==========================================================
 # CONFIRM TRANSACTION
 # ==========================================================
