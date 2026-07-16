@@ -149,7 +149,6 @@ if menu == "Browse Items":
                     "platform_fee": 1,
                     "total_paid": item["price"] + 1,
                     "order_status": "paid",
-                    "listing_token": listing_token,
                 }).execute()
                 st.success(
                     "✅ Order Created!"
