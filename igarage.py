@@ -129,7 +129,7 @@ if menu == "Browse Items":
                 item["purchase_mode"]
             )
             st.write(
-                f"🏷️ Listing ID: {item['listing_token']}"
+                f"🏷️ listing_token: {item['listing_token']}"
             )
             if st.button(
                 "Buy Now",
