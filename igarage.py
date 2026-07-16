@@ -77,7 +77,7 @@ if menu == "Browse Items":
         "active"
     ).eq(
         "deleted",
-        FALSE
+        False
     ).execute().data
     for item in listings:
         if filter_mode == "Buy Now":
@@ -327,11 +327,15 @@ if menu == "My Ads":
         "Enter your seller email"
     )
     if st.button("Show My Ads"):
+
         ads = supabase.table(
             "garage_listings"
         ).select("*").eq(
             "seller_email",
             seller_email
+        ).eq(
+            "deleted",
+            False
         ).execute().data
         if not ads:
             st.warning(
