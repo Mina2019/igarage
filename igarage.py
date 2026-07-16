@@ -360,7 +360,7 @@ if menu == "My Ads":
                     key=f"delete_{ad['id']}"
                 ):
 
-                    st.write("Deleting:", ad["id"])
+                    st.write("Deleting ID:", ad["id"])
 
                     result = supabase.table(
                         "garage_listings"
@@ -370,6 +370,12 @@ if menu == "My Ads":
                     ).execute()
 
                     st.write(result)
+
+                    remaining = supabase.table(
+                        "garage_listings"
+                    ).select("id,title").execute().data
+
+    st.write("Remaining rows:", remaining)
 
                     st.rerun()
 # ==========================================================
