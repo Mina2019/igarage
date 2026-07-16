@@ -463,11 +463,6 @@ if menu == "Buyer Confirmation":
                     "✅ Item received!"
                 )
 
-                st.info(
-                    "💳 Payment is now ready."
-                )
-
-
                 if st.button(
                     "💳 Enter Credit Card Information"
                 ):
