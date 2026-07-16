@@ -59,8 +59,12 @@ st.sidebar.info(
 # ==========================================================
 # BROWSE ITEMS
 # ==========================================================
+
 if menu == "Browse Items":
+
     st.header("Available Items")
+
+
     filter_mode = st.selectbox(
         "Filter",
         [
@@ -69,13 +73,19 @@ if menu == "Browse Items":
             "Reserve"
         ]
     )
+
+
     listings = supabase.table(
         "garage_listings"
     ).select("*").eq(
         "status",
         "active"
     ).execute().data
+
+
     for item in listings:
+
+
         if filter_mode == "Buy Now":
 
             if item["purchase_mode"] not in [
@@ -83,6 +93,8 @@ if menu == "Browse Items":
                 "both"
             ]:
                 continue
+
+
         if filter_mode == "Reserve":
 
             if item["purchase_mode"] not in [
@@ -90,81 +102,139 @@ if menu == "Browse Items":
                 "both"
             ]:
                 continue
+
+
         st.divider()
+
+
         col1, col2 = st.columns(
             [1, 2]
         )
+
+
         with col1:
-            if item["image_urls"]:
+
+            if item.get("image_urls"):
+
                 st.image(
                     item["image_urls"][0],
                     width=200
                 )
+
+
         with col2:
+
             st.subheader(
                 item["title"]
             )
+
+
+            st.write(
+                f"🏷️ Item ID: {item['listing_token']}"
+            )
+
+
             st.write(
                 item["description"]
             )
+
+
             st.write(
                 f"💰 Item price: ${item['price']}"
             )
+
+
             st.write(
                 "💳 iGarage fee: $1"
             )
+
+
             st.write(
                 f"Total: ${item['price'] + 1}"
             )
+
+
             if item["exchange_type"] == "meet":
+
                 st.success(
                     "📍 Meet at Metropolis at Metrotown"
                 )
+
             else:
+
                 st.warning(
                     "🏠 Pickup from seller"
                 )
+
+
             st.write(
                 "Payment option:",
                 item["purchase_mode"]
             )
-            st.write(
-                f"🏷️ listing_token: {item['listing_token']}"
-            )
+
+
             if st.button(
                 "Buy Now",
-                key=item["id"]
+                key=f"buy_{item['id']}"
             ):
-                order_token = str(
-                    uuid.uuid4()
-                )
+
+
                 supabase.table(
                     "garage_orders"
                 ).insert({
-                    "listing_id": item["id"],
-                    "listing_token": item["listing_token"],
-                    "buyer_email": "buyer@example.com",
-                    "seller_email": item["seller_email"],
-                    "item_price": item["price"],
-                    "platform_fee": 1,
-                    "total_paid": item["price"] + 1,
-                    "order_status": "paid",
+
+                    "listing_id":
+                        item["id"],
+
+                    "listing_token":
+                        item["listing_token"],
+
+                    "buyer_email":
+                        "buyer@example.com",
+
+                    "seller_email":
+                        item["seller_email"],
+
+                    "item_price":
+                        item["price"],
+
+                    "platform_fee":
+                        1,
+
+                    "total_paid":
+                        item["price"] + 1,
+
+                    "order_status":
+                        "paid"
+
                 }).execute()
+
+
                 st.success(
                     "✅ Order Created!"
                 )
+
+
                 st.write(
-                    f"**Seller Email:** {item['seller_email']}"
+                    f"Seller Email: {item['seller_email']}"
                 )
+
+
+                st.info(
+                    "Please contact the seller to arrange the exchange."
+                )
+
+
                 if item["exchange_type"] == "meet":
+
                     st.info(
-                        "📍 Meet at Metropolis at Metrotown.\n\n"
-                        "Please email the seller to arrange a convenient meeting time."
+                        "📍 Meet at Metropolis at Metrotown."
                     )
+
                 else:
+
                     st.info(
-                        "🏠 Pickup from seller.\n\n"
-                        "Please email the seller to arrange a pickup time."
+                        "🏠 Pickup from seller."
                     )
 # ==========================================================
 # SELL ITEM
