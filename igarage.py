@@ -453,18 +453,7 @@ if menu == "Buyer Confirmation":
                 )
                 st.divider()
                 if st.button( "✅ I Received the Item"):
-                    st.success(
-                            "✅ Item received!"
-                        )
-
-                        st.info(
-                            "Payment is now ready."
-                        )
-
-                        if st.button(
-                            "💳 Pay Now"
-                        ):
-
-                            st.success(
-                                "✅ Payment completed. Transaction finished!"
-                            )
+                    st.success("✅ Item received!")
+                    st.info("Payment is now ready.")
+                    if st.button("💳 Pay Now"):
+                        st.success("✅ Payment completed. Transaction finished!")
