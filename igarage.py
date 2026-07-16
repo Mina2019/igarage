@@ -388,7 +388,6 @@ if menu == "Seller Confirmation":
             st.write(f"Price: ${listing['price']}")
             st.write(f"Seller: {listing['seller_email']}")
             if st.button("✅ Item Delivered to Buyer"):
-
                 supabase.table(
                     "garage_listings"
                 ).update({
@@ -397,12 +396,10 @@ if menu == "Seller Confirmation":
                     "listing_token",
                     token
                 ).execute()
-
                 st.success(
                     "✅ Delivery confirmed."
                 )
-
-                st.info(
+                st.write(
                     "➡️ The buyer should now visit the Buyer Confirmation page to complete the transaction."
                 )
 # ==========================================================
