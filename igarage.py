@@ -354,10 +354,14 @@ if menu == "My Ads":
                         ad["image_urls"][0],
                         width=150
                     )
+                st.write("Database ID:", ad["id"])
                 if st.button(
                     "🗑 Delete Ad",
                     key=f"delete_{ad['id']}"
                 ):
+
+                    st.write("Deleting:", ad["id"])
+
                     result = supabase.table(
                         "garage_listings"
                     ).delete().eq(
@@ -366,10 +370,6 @@ if menu == "My Ads":
                     ).execute()
 
                     st.write(result)
-
-                    st.success(
-                        "✅ Delete request sent."
-                    )
 
                     st.rerun()
 # ==========================================================
