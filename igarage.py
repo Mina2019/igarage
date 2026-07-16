@@ -388,7 +388,7 @@ if menu == "Seller Confirmation":
             st.write(f"Price: ${listing['price']}")
             st.write(f"Seller: {listing['seller_email']}")
             if st.button("✅ Item Delivered to Buyer"):
-                st.info("➡️ The buyer should now visit the Buyer Confirmation page to complete the Stripe transaction.")
+                st.write("➡️ The buyer should now visit the Buyer Confirmation page to complete the Stripe transaction.")
                 supabase.table(
                     "garage_listings"
                 ).update({
