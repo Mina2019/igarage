@@ -468,40 +468,28 @@ if menu == "Buyer Confirmation":
                 ):
 
                     st.session_state["show_payment"] = True
-
-
-                if st.session_state.get("show_payment"):
-
-                    st.subheader(
-                        "💳 Payment Information"
-                    )
-
-                    card_number = st.text_input(
-                        "Card Number"
-                    )
-
-                    expiry = st.text_input(
-                        "Expiry Date (MM/YY)"
-                    )
-
-                    cvv = st.text_input(
-                        "CVV",
-                        type="password"
-                    )
-
-
-                    if st.button(
-                        "Pay Now"
-                    ):
-
-                        if card_number and expiry and cvv:
-
-                            st.success(
-                                "✅ Payment completed. Transaction finished!"
-                            )
-
-                        else:
-
-                            st.error(
-                                "Please enter all payment information."
+                    if st.session_state.get("show_payment"):
+                        st.subheader(
+                            "💳 Payment Information"
+                        )
+                        card_number = st.text_input(
+                            "Card Number"
+                        )
+                        expiry = st.text_input(
+                            "Expiry Date (MM/YY)"
+                        )
+                        cvv = st.text_input(
+                            "CVV",
+                            type="password"
+                        )
+                        if st.button(
+                            "Pay Now"
+                        ):
+                            if card_number and expiry and cvv:
+                                st.success(
+                                    "✅ Payment completed. Transaction finished!"
+                                )
+                            else:
+                                st.error(
+                                    "Please enter all payment information."
                             )
