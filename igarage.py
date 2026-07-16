@@ -397,8 +397,8 @@ if menu == "Seller Confirmation":
                     token
                 ).execute()
                 st.success("✅ Delivery confirmed.")
-                # Reload listing after button clicks
-                st.write("➡️ The buyer should now visit the Buyer Confirmation page to complete the Stripe transaction.")
+
+            st.info("➡️ The buyer should now visit the Buyer Confirmation page to complete the Stripe transaction.")
 # ==========================================================
 # BUYER CONFIRMATION
 # ==========================================================
