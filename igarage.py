@@ -77,7 +77,7 @@ if menu == "Browse Items":
         "active"
     ).eq(
         "deleted",
-        False
+        FALSE
     ).execute().data
     for item in listings:
         if filter_mode == "Buy Now":
