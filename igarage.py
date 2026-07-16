@@ -356,26 +356,26 @@ if menu == "My Ads":
                     )
                 st.write("Database ID:", ad["id"])
                 if st.button(
-                    "🗑 Delete Ad",
-                    key=f"delete_{ad['id']}"
-                ):
+                        "🗑 Delete Ad",
+                        key=f"delete_{ad['id']}"
+                    ):
 
-                    st.write("Deleting ID:", ad["id"])
+                        st.write("Deleting ID:", ad["id"])
 
-                    result = supabase.table(
-                        "garage_listings"
-                    ).delete().eq(
-                        "id",
-                        ad["id"]
-                    ).execute()
+                        result = supabase.table(
+                            "garage_listings"
+                        ).delete().eq(
+                            "id",
+                            ad["id"]
+                        ).execute()
 
-                    st.write(result)
+                        st.write(result)
 
-                    remaining = supabase.table(
-                        "garage_listings"
-                    ).select("id,title").execute().data
+                        remaining = supabase.table(
+                            "garage_listings"
+                        ).select("id,title").execute().data
 
-    st.write("Remaining rows:", remaining)
+                        st.write("Remaining rows:", remaining)
 
                     st.rerun()
 # ==========================================================
