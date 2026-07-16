@@ -356,20 +356,19 @@ if menu == "My Ads":
                     )
                 st.write("Database ID:", ad["id"])
                 if st.button("🗑 Delete Ad", key=f"delete_{ad['id']}"):
-                    try:
-                        result = supabase.table(
-                            "garage_listings"
-                        ).delete().eq(
-                            "listing_token",
-                            ad["listing_token"]
-                        ).execute()
 
-                        st.success("Delete request completed.")
-                        st.write(result)
+                    result = supabase.table(
+                        "garage_listings"
+                    ).delete().eq(
+                        "listing_token",
+                        ad["listing_token"]
+                    ).execute()
 
-                    except Exception as e:
-                        st.error("Delete failed")
-                        st.exception(e)
+                    st.write(result)
+
+                    st.success(
+                        "Delete attempted"
+                    )
                     st.rerun()
 # ==========================================================
 # SELLER CONFIRMATION
