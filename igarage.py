@@ -396,7 +396,7 @@ if menu == "My Ads":
 # ==========================================================
 if menu == "Seller Confirmation":
     st.header("Confirm Transaction")
-    token = st.text_input("Transaction ID")
+    token = st.text_input("Item ID")
     if st.button("Find Transaction"):
         listing = supabase.table(
                 "garage_listings"
@@ -421,7 +421,7 @@ if menu == "Seller Confirmation":
 if menu == "Buyer Confirmation":
     st.header("Buyer Confirmation")
     listing_id = st.text_input(
-        "Enter Listing ID"
+        "Item ID"
     )
     if st.button("Find Listing"):
         if not listing_id:
