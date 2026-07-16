@@ -439,20 +439,11 @@ if menu == "Buyer Confirmation":
                     f"Seller: {item['seller_email']}"
                 )
                 st.divider()
-                if st.button(
-                    "✅ I Received the Item"
-                ):
+                if st.button("✅ I Received the Item"):
                     st.session_state["item_received"] = True
-                if st.session_state.get("item_received"):
-                    st.success(
-                        "✅ Item received!"
-                    )
-                    st.info(
-                        "Payment is now ready."
-                    )
-                    if st.button(
-                        "💳 Pay Now"
-                    ):
-                        st.success(
-                            "✅ Payment completed. Transaction finished!"
-                        )
+                    
+            if st.session_state.get("item_received"):
+                st.success("✅ Item received!")
+                st.info("Payment is now ready.")
+                if st.button("💳 Pay Now"):
+                    st.success("✅ Payment completed. Transaction finished!")
