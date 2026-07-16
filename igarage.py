@@ -396,21 +396,9 @@ if menu == "Seller Confirmation":
                     "listing_token",
                     token
                 ).execute()
-                st.success(
-                    "✅ Delivery confirmed."
-                )
-                st.write(
-                    "➡️ The buyer should now visit the Buyer Confirmation page to complete the transaction."
-                )
-            # Reload listing after button clicks
-            if st.session_state.get("buyer_listing_id"):
-                listing = supabase.table(
-                "garage_listings"
-                    ).select("*").eq(
-                        "listing_token",
-                        token
-                    ).execute().data
-
+                st.success("✅ Delivery confirmed.")
+                # Reload listing after button clicks
+                st.write("➡️ The buyer should now visit the Buyer Confirmation page to complete the Stripe transaction.")
 # ==========================================================
 # BUYER CONFIRMATION
 # ==========================================================
@@ -458,15 +446,12 @@ if menu == "Buyer Confirmation":
             if st.button("✅ I Received the Item"):
                 st.session_state["item_received"] = True
             if st.session_state.get("item_received"):
-
                 st.success(
                     "✅ Item received!"
                 )
-
                 if st.button(
                     "💳 Pay Now"
                 ):
-
                     st.session_state["show_payment"] = True
                     if st.session_state.get("show_payment"):
                         st.subheader(
