@@ -357,12 +357,12 @@ if menu == "My Ads":
                 st.write("Database ID:", ad["id"])
                 if st.button("🗑 Delete Ad", key=f"delete_{ad['id']}"):
                     try:
-                        result = (
-                            supabase.table("garage_listings")
-                            .delete()
-                            .eq("id", ad["id"])
-                            .execute()
-                        )
+                        result = supabase.table(
+                            "garage_listings"
+                        ).delete().eq(
+                            "listing_token",
+                            ad["listing_token"]
+                        ).execute()
 
                         st.success("Delete request completed.")
                         st.write(result)
