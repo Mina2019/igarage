@@ -370,7 +370,7 @@ if menu == "My Ads":
                     f"💰 Price: ${ad['price']}"
                 )
                 st.write(
-                    f"🆔 Listing ID: {ad.get('listing_token','Not assigned')}"
+                    f"🆔 Item ID: {ad.get('listing_token','Not assigned')}"
                 )
                 if ad.get("image_urls"):
                     st.image(
