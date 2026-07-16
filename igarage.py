@@ -75,6 +75,9 @@ if menu == "Browse Items":
     ).select("*").eq(
         "status",
         "active"
+    ).eq(
+        "deleted",
+        False
     ).execute().data
     for item in listings:
         if filter_mode == "Buy Now":
@@ -355,20 +358,25 @@ if menu == "My Ads":
                         width=150
                     )
                 st.write("Database ID:", ad["id"])
-                if st.button("🗑 Delete Ad", key=f"delete_{ad['id']}"):
+                if st.button(
+                    "🗑 Delete Ad",
+                    key=f"delete_{ad['id']}"
+                ):
 
-                    result = supabase.table(
+                    supabase.table(
                         "garage_listings"
-                    ).delete().eq(
-                        "listing_token uuid",
-                        ad["listing_token uuid"]
+                    ).update({
+                        "deleted": True
+                    }).eq(
+                        "listing_token",
+                        ad["listing_token"]
                     ).execute()
 
-                    st.write(result)
-
                     st.success(
-                        "Delete attempted"
+                        "✅ Ad deleted successfully!"
                     )
+
+                    st.rerun()
                     st.rerun()
 # ==========================================================
 # SELLER CONFIRMATION
