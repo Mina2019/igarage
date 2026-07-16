@@ -464,7 +464,7 @@ if menu == "Buyer Confirmation":
                 )
 
                 if st.button(
-                    "💳 Enter Credit Card Information"
+                    "💳 Pay Now"
                 ):
 
                     st.session_state["show_payment"] = True
