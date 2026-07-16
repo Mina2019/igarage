@@ -59,12 +59,8 @@ st.sidebar.info(
 # ==========================================================
 # BROWSE ITEMS
 # ==========================================================
-
 if menu == "Browse Items":
-
     st.header("Available Items")
-
-
     filter_mode = st.selectbox(
         "Filter",
         [
@@ -73,37 +69,25 @@ if menu == "Browse Items":
             "Reserve"
         ]
     )
-
-
     listings = supabase.table(
         "garage_listings"
     ).select("*").eq(
         "status",
         "active"
     ).execute().data
-
-
     for item in listings:
-
-
         if filter_mode == "Buy Now":
-
             if item["purchase_mode"] not in [
                 "buy_now",
                 "both"
             ]:
                 continue
-
-
         if filter_mode == "Reserve":
-
             if item["purchase_mode"] not in [
                 "reserve",
                 "both"
             ]:
                 continue
-
-
         st.divider()
 
 
@@ -120,52 +104,33 @@ if menu == "Browse Items":
                     item["image_urls"][0],
                     width=200
                 )
-
-
         with col2:
-
             st.subheader(
                 item["title"]
             )
-
-
             st.write(
                 f"🏷️ Item ID: {item['listing_token']}"
             )
-
-
             st.write(
                 item["description"]
             )
-
-
             st.write(
                 f"💰 Item price: ${item['price']}"
             )
-
-
             st.write(
                 "💳 iGarage fee: $1"
             )
-
-
             st.write(
                 f"Total: ${item['price'] + 1}"
             )
-
-
             if item["exchange_type"] == "meet":
-
                 st.success(
                     "📍 Meet at Metropolis at Metrotown"
                 )
-
             else:
-
                 st.warning(
                     "🏠 Pickup from seller"
                 )
-
 
             st.write(
                 "Payment option:",
@@ -185,9 +150,6 @@ if menu == "Browse Items":
 
                     "listing_id":
                         item["id"],
-
-                    "listing_token":
-                        item["listing_token"],
 
                     "buyer_email":
                         "buyer@example.com",
