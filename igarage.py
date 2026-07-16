@@ -410,40 +410,7 @@ if menu == "Seller Confirmation":
                     "listing_token",
                     st.session_state["buyer_listing_id"]
                 ).execute().data
-                if listing:
-                    item = listing[0]
-                    st.write(
-                        f"🏠 Item: {item['title']}"
-                    )
-                    st.write(
-                        f"💰 Price: ${item['price']}"
-                    )
-                    st.write(
-                        f"Seller: {item['seller_email']}"
-                    )
-                    st.divider()
-                    if st.button(
-                        "✅ I Received the Item"
-                    ):
-                        st.session_state["item_received"] = True
-                    if st.session_state.get("item_received"):
-                        st.success(
-                            "✅ Item received!"
-                        )
-                        st.info(
-                            "💳 Payment is now ready."
-                        )
-                        if st.button(
-                            "💳 Pay Now"
-                        ):
-                            st.success(
-                                "✅ Payment completed. Transaction finished!"
-                            )
-                    if st.session_state.get("item_received"):
-                        st.success("✅ Item received!")
-                        st.info("Payment is now ready.")
-                        if st.button("💳 Pay Now"):
-                            st.success("✅ Payment completed. Transaction finished!")
+
 # ==========================================================
 # BUYER CONFIRMATION
 # ==========================================================
