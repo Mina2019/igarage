@@ -141,20 +141,14 @@ if menu == "Browse Items":
                 supabase.table(
                     "garage_orders"
                 ).insert({
-                    "listing_id":
-                        item["id"],
-                    "buyer_email":
-                        "buyer@example.com",
-                    "seller_email":
-                        item["seller_email"],
-                    "item_price":
-                        item["price"],
-                    "platform_fee":
-                        1,
-                    "total_paid":
-                        item["price"] + 1,
-                    "order_status":
-                        "paid",
+                    "listing_id": item["id"],
+                    "listing_token": item["listing_token"],
+                    "buyer_email": "buyer@example.com",
+                    "seller_email": item["seller_email"],
+                    "item_price": item["price"],
+                    "platform_fee": 1,
+                    "total_paid": item["price"] + 1,
+                    "order_status": "paid",
                     "listing_token": listing_token,
                 }).execute()
                 st.success(
