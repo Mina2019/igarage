@@ -360,8 +360,8 @@ if menu == "My Ads":
                     result = supabase.table(
                         "garage_listings"
                     ).delete().eq(
-                        "listing_token",
-                        ad["listing_token"]
+                        "listing_token uuid",
+                        ad["listing_token uuid"]
                     ).execute()
 
                     st.write(result)
