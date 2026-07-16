@@ -459,21 +459,58 @@ if menu == "Buyer Confirmation":
                 "✅ I Received the Item"
             ):
                 st.session_state["item_received"] = True
+
+                    )
             if st.session_state.get("item_received"):
+
                 st.success(
                     "✅ Item received!"
                 )
+
                 st.info(
                     "💳 Payment is now ready."
                 )
+
+
                 if st.button(
-                    "💳 Pay Now"
+                    "💳 Enter Credit Card Information"
                 ):
-                    st.success(
-                        "✅ Payment completed. Transaction finished!"
+
+                    st.session_state["show_payment"] = True
+
+
+                if st.session_state.get("show_payment"):
+
+                    st.subheader(
+                        "💳 Payment Information"
                     )
-            if st.session_state.get("item_received"):
-                st.success("✅ Item received!")
-                st.info("Payment is now ready.")
-                if st.button("💳 Pay Now"):
-                    st.success("✅ Payment completed. Transaction finished!")
+
+                    card_number = st.text_input(
+                        "Card Number"
+                    )
+
+                    expiry = st.text_input(
+                        "Expiry Date (MM/YY)"
+                    )
+
+                    cvv = st.text_input(
+                        "CVV",
+                        type="password"
+                    )
+
+
+                    if st.button(
+                        "Pay Now"
+                    ):
+
+                        if card_number and expiry and cvv:
+
+                            st.success(
+                                "✅ Payment completed. Transaction finished!"
+                            )
+
+                        else:
+
+                            st.error(
+                                "Please enter all payment information."
+                            )
