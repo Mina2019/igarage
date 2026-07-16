@@ -89,17 +89,11 @@ if menu == "Browse Items":
             ]:
                 continue
         st.divider()
-
-
         col1, col2 = st.columns(
             [1, 2]
         )
-
-
         with col1:
-
             if item.get("image_urls"):
-
                 st.image(
                     item["image_urls"][0],
                     width=200
@@ -136,30 +130,21 @@ if menu == "Browse Items":
                 "Payment option:",
                 item["purchase_mode"]
             )
-
-
             if st.button(
                 "Buy Now",
                 key=f"buy_{item['id']}"
             ):
-
-
                 supabase.table(
                     "garage_orders"
                 ).insert({
-
                     "listing_id":
                         item["id"],
-
                     "buyer_email":
                         "buyer@example.com",
-
                     "seller_email":
                         item["seller_email"],
-
                     "item_price":
                         item["price"],
-
                     "platform_fee":
                         1,
 
@@ -170,31 +155,21 @@ if menu == "Browse Items":
                         "paid"
 
                 }).execute()
-
-
                 st.success(
                     "✅ Order Created!"
                 )
-
-
                 st.write(
                     f"Seller Email: {item['seller_email']}"
                 )
-
-
                 st.info(
                     "Please contact the seller to arrange the exchange."
                 )
-
-
                 if item["exchange_type"] == "meet":
 
                     st.info(
                         "📍 Meet at Metropolis at Metrotown."
                     )
-
                 else:
-
                     st.info(
                         "🏠 Pickup from seller."
                     )
@@ -412,9 +387,24 @@ if menu == "Seller Confirmation":
             st.write(f"Item: {listing['title']}")
             st.write(f"Price: ${listing['price']}")
             st.write(f"Seller: {listing['seller_email']}")
-            if st.button("✅ item delivered to buyer"):
-                st.write("Delivery confirmed.")
-                st.write("➡️ The buyer should now visit the Buyer Confirmation page to complete the transaction.")
+            if st.button("✅ Item Delivered to Buyer"):
+
+                supabase.table(
+                    "garage_listings"
+                ).update({
+                    "seller_delivered": True
+                }).eq(
+                    "listing_token",
+                    token
+                ).execute()
+
+                st.success(
+                    "✅ Delivery confirmed."
+                )
+
+                st.info(
+                    "➡️ The buyer should now visit the Buyer Confirmation page to complete the transaction."
+                )
 # ==========================================================
 # BUYER CONFIRMATION
 # ==========================================================
@@ -451,32 +441,21 @@ if menu == "Buyer Confirmation":
                 st.write(
                     f"Seller: {item['seller_email']}"
                 )
-
                 st.divider()
-
-
                 if st.button(
                     "✅ I Received the Item"
                 ):
-
                     st.session_state["item_received"] = True
-
-
                 if st.session_state.get("item_received"):
-
                     st.success(
                         "✅ Item received!"
                     )
-
                     st.info(
                         "Payment is now ready."
                     )
-
-
                     if st.button(
                         "💳 Pay Now"
                     ):
-
                         st.success(
                             "✅ Payment completed. Transaction finished!"
                         )
