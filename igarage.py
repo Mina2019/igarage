@@ -370,16 +370,18 @@ if menu == "My Ads":
 # SELLER CONFIRMATION
 # ==========================================================
 if menu == "Seller Confirmation":
-    st.header("Confirm Transaction")
+    st.header("Seller Confirmation")
     token = st.text_input("Item ID")
     if st.button("Find Transaction"):
+        st.session_state["seller_listing_token"] = token.strip()
+    if st.session_state.get("seller_listing_token"):
         listing = supabase.table(
-                "garage_listings"
-            ).select("*").eq(
-                "listing_token",
-                token
-            ).execute().data
-        if len(listing) == 0:
+            "garage_listings"
+        ).select("*").eq(
+            "listing_token",
+            st.session_state["seller_listing_token"]
+        ).execute().data
+        if not listing:
             st.error("Listing not found.")
         else:
             listing = listing[0]
@@ -387,19 +389,23 @@ if menu == "Seller Confirmation":
             st.write(f"Item: {listing['title']}")
             st.write(f"Price: ${listing['price']}")
             st.write(f"Seller: {listing['seller_email']}")
-            if st.button("✅ Item Delivered to Buyer"):
-                st.write("➡️ The buyer should now visit the Buyer Confirmation page to complete the Stripe transaction.")
-                supabase.table(
-                    "garage_listings"
-                ).update({
-                    "seller_delivered": True
-                }).eq(
-                    "listing_token",
-                    token
-                ).execute()
-                st.success("✅ Delivery confirmed.")
-
-            
+            st.divider()
+            if listing.get("seller_delivered"):
+                st.success("✅ Item has already been marked as delivered.")
+                st.info(
+                    "➡️ The buyer should now visit the Buyer Confirmation page to complete the payment."
+                )
+            else:
+                if st.button("✅ Item Delivered to Buyer"):
+                    supabase.table(
+                        "garage_listings"
+                    ).update({
+                        "seller_delivered": True
+                    }).eq(
+                        "listing_token",
+                        st.session_state["seller_listing_token"]
+                    ).execute()
+                    st.rerun()
 # ==========================================================
 # BUYER CONFIRMATION
 # ==========================================================
