@@ -76,7 +76,7 @@ if menu == "Browse Items":
         "status",
         "active"
     ).eq(
-        "deleted bool",
+        "deleted",
         False
     ).execute().data
     for item in listings:
@@ -362,18 +362,32 @@ if menu == "My Ads":
                     key=f"delete_{ad['id']}"
                 ):
 
-                    supabase.table(
-                        "garage_listings"
-                    ).update({
-                        "deleted bool": True
-                    }).eq(
-                        "listing_token",
-                        ad["listing_token"]
-                    ).execute()
+                    try:
 
-                    st.success(
-                        "✅ Ad deleted successfully!"
-                    )
+                        result = supabase.table(
+                            "garage_listings"
+                        ).update({
+                            "deleted": True
+                        }).eq(
+                            "listing_token",
+                            ad["listing_token"]
+                        ).execute()
+
+                        st.write(result)
+
+                        st.success(
+                            "✅ Ad deleted successfully!"
+                        )
+
+                        st.rerun()
+
+                    except Exception as e:
+
+                        st.error(
+                            "❌ Delete failed"
+                        )
+
+                        st.exception(e)
 
                     st.rerun()
 # ==========================================================
