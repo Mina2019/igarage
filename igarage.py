@@ -76,7 +76,7 @@ if menu == "Browse Items":
         "status",
         "active"
     ).eq(
-        "deleted",
+        "deleted bool",
         False
     ).execute().data
     for item in listings:
@@ -357,7 +357,6 @@ if menu == "My Ads":
                         ad["image_urls"][0],
                         width=150
                     )
-                st.write("Database ID:", ad["id"])
                 if st.button(
                     "🗑 Delete Ad",
                     key=f"delete_{ad['id']}"
@@ -366,7 +365,7 @@ if menu == "My Ads":
                     supabase.table(
                         "garage_listings"
                     ).update({
-                        "deleted": True
+                        "deleted bool": True
                     }).eq(
                         "listing_token",
                         ad["listing_token"]
@@ -376,7 +375,6 @@ if menu == "My Ads":
                         "✅ Ad deleted successfully!"
                     )
 
-                    st.rerun()
                     st.rerun()
 # ==========================================================
 # SELLER CONFIRMATION
