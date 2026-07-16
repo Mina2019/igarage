@@ -405,11 +405,11 @@ if menu == "Seller Confirmation":
             # Reload listing after button clicks
             if st.session_state.get("buyer_listing_id"):
                 listing = supabase.table(
-                    "garage_listings"
-                ).select("*").eq(
-                    "listing_token",
-                    st.session_state["buyer_listing_id"]
-                ).execute().data
+                "garage_listings"
+                    ).select("*").eq(
+                        "listing_token",
+                        token
+                    ).execute().data
 
 # ==========================================================
 # BUYER CONFIRMATION
