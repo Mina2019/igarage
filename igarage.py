@@ -371,7 +371,7 @@ if menu == "My Ads":
                         result = supabase.table(
                             "garage_listings"
                         ).update({
-                            "deleted": True
+                            "deleted bool": True
                         }).eq(
                             "listing_token",
                             ad["listing_token"]
