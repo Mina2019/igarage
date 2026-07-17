@@ -326,17 +326,18 @@ if menu == "My Ads":
     seller_email = st.text_input(
         "Enter your seller email"
     )
-    if st.button("Show My Ads"):
-
+    if st.session_state.get("seller_email"):
         ads = supabase.table(
             "garage_listings"
         ).select("*").eq(
             "seller_email",
-            seller_email
+            st.session_state["seller_email"]
         ).eq(
             "deleted",
             False
         ).execute().data
+
+        # display ads here
         if not ads:
             st.warning(
                 "No ads found."
