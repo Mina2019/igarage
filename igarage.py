@@ -77,7 +77,7 @@ if menu == "Browse Items":
         "active"
     ).eq(
         "deleted",
-        False
+        False.upper()
     ).execute().data
     for item in listings:
         if filter_mode == "Buy Now":
@@ -371,7 +371,7 @@ if menu == "My Ads":
                         result = supabase.table(
                             "garage_listings"
                         ).update({
-                            "deleted bool": True
+                            "deleted": True.upper()
                         }).eq(
                             "listing_token",
                             ad["listing_token"]
