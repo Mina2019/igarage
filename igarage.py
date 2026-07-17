@@ -361,36 +361,23 @@ if menu == "My Ads":
                         ad["image_urls"][0],
                         width=150
                     )
-                if st.button(
-                    "🗑 Delete Ad",
-                    key=f"delete_{ad['id']}"
-                ):
-
+                if st.button("🗑 Delete Ad", key=f"delete_{ad['id']}"):
+                    st.write("Button clicked")
                     try:
+                        st.write("Entered try")
 
                         result = supabase.table(
                             "garage_listings"
                         ).update({
-                            "deleted": True.upper()
+                            "deleted": True
                         }).eq(
                             "listing_token",
                             ad["listing_token"]
                         ).execute()
 
-                        st.write(result)
-
-                        st.success(
-                            "✅ Ad deleted successfully!"
-                        )
-
-                        st.rerun()
+                        st.write("Update finished")
 
                     except Exception as e:
-
-                        st.error(
-                            "❌ Delete failed"
-                        )
-
                         st.exception(e)
 
                     
