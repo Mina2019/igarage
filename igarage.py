@@ -322,11 +322,18 @@ if menu == "Sell Item":
 # MY ADS
 # ==========================================================
 if menu == "My Ads":
+
     st.header("My Ads")
+
     seller_email = st.text_input(
         "Enter your seller email"
     )
+
+    if st.button("Show My Ads"):
+        st.session_state["seller_email"] = seller_email.strip()
+
     if st.session_state.get("seller_email"):
+
         ads = supabase.table(
             "garage_listings"
         ).select("*").eq(
@@ -337,37 +344,49 @@ if menu == "My Ads":
             False
         ).execute().data
 
-        # display ads here
         if not ads:
+
             st.warning(
                 "No ads found."
             )
+
         else:
+
             st.success(
                 f"{len(ads)} ad(s) found"
             )
+
             for ad in ads:
+
                 st.divider()
+
                 st.subheader(
                     ad["title"]
                 )
+
                 st.write(
                     f"💰 Price: ${ad['price']}"
                 )
+
                 st.write(
-                    f"🆔 Item ID: {ad.get('listing_token','Not assigned')}"
+                    f"🆔 Item ID: {ad['listing_token']}"
                 )
+
                 if ad.get("image_urls"):
+
                     st.image(
                         ad["image_urls"][0],
                         width=150
                     )
-                if st.button("🗑 Delete Ad", key=f"delete_{ad['id']}"):
-                    st.write("Button clicked")
-                    try:
-                        st.write("Entered try")
 
-                        result = supabase.table(
+                if st.button(
+                    "🗑 Delete Ad",
+                    key=f"delete_{ad['listing_token']}"
+                ):
+
+                    try:
+
+                        supabase.table(
                             "garage_listings"
                         ).update({
                             "deleted": True
@@ -376,9 +395,18 @@ if menu == "My Ads":
                             ad["listing_token"]
                         ).execute()
 
-                        st.write("Update finished")
+                        st.success(
+                            "✅ Ad deleted successfully!"
+                        )
+
+                        st.rerun()
 
                     except Exception as e:
+
+                        st.error(
+                            "❌ Unable to delete ad."
+                        )
+
                         st.exception(e)
 
                     
